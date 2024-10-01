@@ -1,0 +1,7 @@
+.auth-container {
+    max-width: 600px;
+    border: 1px solid #3F96FE;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: rgba(red, green, blue, 2);
+}
