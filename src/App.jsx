@@ -9,6 +9,7 @@ import Register from "./pages/register";
 import "./styles/global.css";
 import MainLayout from "./components/layouts/MainLayout";
 import { ROUTE_CONTANTS } from "./core/utils/constants";
+import "./style.css";
 
 const App = () => {
   return (

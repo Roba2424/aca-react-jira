@@ -38,6 +38,7 @@ const Register = () => {
   return (
     <div className="auth-container">
       <Form layout="vertical" onFinish={() => handleRegister(user)} form={form}>
+        <h2 className="auth-title">Register</h2>
         <Form.Item label="First Name">
           <Input
             type="text"
@@ -89,10 +90,12 @@ const Register = () => {
             onChange={handleChangeInput}
           />
         </Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Register
-        </Button>
-        <Link to={ROUTE_CONTANTS.LOGIN}>Sign in</Link>
+        <div className="auth-btn-container">
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Register
+          </Button>
+          <Link to={ROUTE_CONTANTS.LOGIN}>Sign in</Link>
+        </div>
       </Form>
     </div>
   );

@@ -26,6 +26,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <Form layout="vertical" form={form} onFinish={handleLogin}>
+        <h2 className="auth-title">Log In</h2>
         <Form.Item
           label="Email"
           name="email"
@@ -41,7 +42,6 @@ const Login = () => {
         <Form.Item
           label="Password"
           name="password"
-          tooltip=""
           rules={[
             {
               required: true,
@@ -51,10 +51,12 @@ const Login = () => {
         >
           <Input.Password placeholder="password" />
         </Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Sign in
-        </Button>
-        <Link to={ROUTE_CONTANTS.REGISTER}>Sign Up</Link>
+        <div className="auth-btn-container">
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Sign in
+          </Button>
+          <Link to={ROUTE_CONTANTS.REGISTER}>Sign Up</Link>
+        </div>
       </Form>
     </div>
   );
