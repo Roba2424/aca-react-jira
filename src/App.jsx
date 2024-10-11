@@ -1,15 +1,27 @@
-import Header from "./components/global/Header";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import "./styles/global.css";
+import MainLayout from "./components/layouts/MainLayout";
+import { ROUTE_CONTANTS } from "./core/utils/constants";
 
 const App = () => {
   return (
-    <div id="divContainer">
-      <Header />
-      <Register />
-      <Login/>
-    </div>
+    <RouterProvider
+      router={createBrowserRouter(
+        createRoutesFromElements(
+          <Route path="/" element={<MainLayout />}>
+            <Route path={ROUTE_CONTANTS.LOGIN} element={<Login />} />
+            <Route path={ROUTE_CONTANTS.REGISTER} element={<Register />} />
+          </Route>
+        )
+      )}
+    />
   );
 };
 

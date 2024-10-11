@@ -3,11 +3,13 @@ import { auth } from "../../services/firebase";
 import { useState } from "react";
 import { Button, Form, Input } from "antd";
 import "./style.css";
-import { regexpValidation } from "../../core/utils/constants";
+import { regexpValidation, ROUTE_CONTANTS } from "../../core/utils/constants";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -20,6 +22,7 @@ const Register = () => {
     const { email, password } = values;
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      navigate(ROUTE_CONTANTS.LOGIN);
     } catch (e) {
       console.log(e);
     } finally {
@@ -33,8 +36,8 @@ const Register = () => {
   };
 
   return (
-    <div className="auth_container">
-      <Form layout="vertical" onFinish={handleRegister} form={form}>
+    <div className="auth-container">
+      <Form layout="vertical" onFinish={() => handleRegister(user)} form={form}>
         <Form.Item label="First Name">
           <Input
             type="text"
@@ -89,6 +92,7 @@ const Register = () => {
         <Button type="primary" htmlType="submit" loading={loading}>
           Register
         </Button>
+        <Link to={ROUTE_CONTANTS.LOGIN}>Sign in</Link>
       </Form>
     </div>
   );

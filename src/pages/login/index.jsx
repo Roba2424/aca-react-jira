@@ -2,6 +2,9 @@ import { Form, Input, Button } from "antd";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../services/firebase";
 import { useState } from "react";
+import "./style.css";
+import { Link } from "react-router-dom";
+import { ROUTE_CONTANTS } from "../../core/utils/constants";
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -21,7 +24,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <Form layout="vertical" form={form} onFinish={handleLogin}>
         <Form.Item
           label="Email"
@@ -51,6 +54,7 @@ const Login = () => {
         <Button type="primary" htmlType="submit" loading={loading}>
           Sign in
         </Button>
+        <Link to={ROUTE_CONTANTS.REGISTER}>Sign Up</Link>
       </Form>
     </div>
   );
