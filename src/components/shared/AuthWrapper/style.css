@@ -1,0 +1,29 @@
+.auth-wrapper {
+  width: 800px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 2px auto;
+}
+
+.auth-wrapper > div {
+  border: 1px solid black;
+}
+
+.banner-container {
+  background-color: #dddcdceb;
+  border-bottom-left-radius: 12px;
+  border-top-left-radius: 12px;
+  background-position: center;
+  background-size: cover;
+}
+
+.form-container {
+  border: 1px solid #dddcdceb;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  padding: 12px;
+}
+
+.form-container Flex *{
+ padding-left: 20px;
+}

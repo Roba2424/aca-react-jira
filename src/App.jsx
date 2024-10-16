@@ -4,12 +4,10 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Login from "./pages/login";
-import Register from "./pages/register";
 import "./styles/global.css";
 import MainLayout from "./components/layouts/MainLayout";
 import { ROUTE_CONTANTS } from "./core/utils/constants";
-import "./style.css";
+import { Login, Register } from "./pages/auth";
 
 const App = () => {
   return (
