@@ -13,7 +13,7 @@ const AuthWrapper = ({ title, children, banner }) => {
       <div className="form-container">
         <Title level={3}>{title}</Title>
         {children}
-      </div>
+      </div>  
     </div>
   );
 };

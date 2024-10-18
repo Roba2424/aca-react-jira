@@ -1,13 +1,13 @@
-import { Form, Input, Button, Flex } from "antd";
+import { Form, Input, Button, Flex, notification } from "antd";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../services/firebase/index";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ROUTE_CONTANTS } from "../../../core/utils/constants";
+import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
 import AuthWrapper from "../../../components/shared/AuthWrapper";
 import LoginBanner from "../../../core/images/auth-login.jpg";
 
-const Login = () => {
+const Login = ({ setIsAuth }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +18,9 @@ const Login = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response, ">>>>>>");
     } catch (error) {
-      console.log(error);
+      notification.error({
+        message: 'Invalid Login Credentials',
+      });
     } finally {
       console.log(setLoading(false));
     }
@@ -52,7 +54,7 @@ const Login = () => {
           <Input.Password placeholder="password" />
         </Form.Item>
         <Flex justify="end" align="center">
-          <Link to={ROUTE_CONTANTS.REGISTER}>Create Account</Link>
+          <Link to={ROUTE_CONSTANTS.REGISTER}>Create Account</Link>
           <Button type="primary" htmlType="submit" loading={loading}>
             Sign in
           </Button>

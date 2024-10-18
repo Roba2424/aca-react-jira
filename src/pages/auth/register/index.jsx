@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button, Flex, Form, Input } from "antd";
 import {
   regexpValidation,
-  ROUTE_CONTANTS,
+  ROUTE_CONSTANTS,
 } from "../../../core/utils/constants";
 import { Link, useNavigate } from "react-router-dom";
 import AuthWrapper from "../../../components/shared/AuthWrapper";
@@ -26,7 +26,7 @@ const Register = () => {
     const { email, password } = values;
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate(ROUTE_CONTANTS.LOGIN);
+      navigate(ROUTE_CONSTANTS.LOGIN);
     } catch (e) {
       console.log(e);
     } finally {
@@ -125,7 +125,7 @@ const Register = () => {
           />
         </Form.Item>
         <Flex justify="end" align="center">
-          <Link to={ROUTE_CONTANTS.LOGIN}>Sign in</Link>
+          <Link to={ROUTE_CONSTANTS.LOGIN}>Sign in</Link>
           <Button type="primary" htmlType="submit" loading={loading}>
             Register
           </Button>
