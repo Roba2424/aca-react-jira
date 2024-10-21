@@ -7,7 +7,7 @@ import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
 import AuthWrapper from "../../../components/shared/AuthWrapper";
 import LoginBanner from "../../../core/images/auth-login.jpg";
 
-const Login = ({ setIsAuth }) => {
+const Login = ({}) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +19,7 @@ const Login = ({ setIsAuth }) => {
       console.log(response, ">>>>>>");
     } catch (error) {
       notification.error({
-        message: 'Invalid Login Credentials',
+        message: "Invalid Login Credentials",
       });
     } finally {
       console.log(setLoading(false));
