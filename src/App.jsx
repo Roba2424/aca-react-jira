@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./services/firebase";
 import Cabinet from "./pages/cabinet";
+import Profile from "./pages/profile";
 import LoadingWrapper from "./components/shared/LoadinWrapper";
 import { AuthContext } from "./context/authContext";
 
@@ -59,6 +60,16 @@ const App = () => {
                   element={
                     isAuth ? (
                       <Cabinet />
+                    ) : (
+                      <Navigate to={ROUTE_CONSTANTS.LOGIN} />
+                    )
+                  }
+                />
+                <Route
+                  path={ROUTE_CONSTANTS.PROFILE}
+                  element={
+                    isAuth ? (
+                      <Profile />
                     ) : (
                       <Navigate to={ROUTE_CONSTANTS.LOGIN} />
                     )

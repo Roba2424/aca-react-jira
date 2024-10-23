@@ -22,7 +22,7 @@ const Login = ({}) => {
         message: "Invalid Login Credentials",
       });
     } finally {
-      console.log(setLoading(false));
+      setLoading(false);
     }
   };
 

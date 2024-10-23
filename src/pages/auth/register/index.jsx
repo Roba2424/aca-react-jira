@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../services/firebase";
+import { auth, db } from "../../../services/firebase";
 import { useState } from "react";
 import { Button, Flex, Form, Input } from "antd";
 import {
@@ -9,23 +9,27 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import AuthWrapper from "../../../components/shared/AuthWrapper";
 import RegisterBanner from "../../../core/images/auth-register.jpg";
+import { doc, setDoc } from "@firebase/firestore";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
 
   const handleRegister = async (values) => {
     setLoading(true);
-    const { email, password } = values;
+    const { firstName, lastName, email, password } = values;
+
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const { uid } = response.user;
+      const createdDoc = doc(db, "registeredUsers", uid);
+      await setDoc(createdDoc, { uid, firstName, lastName, email });  
       navigate(ROUTE_CONSTANTS.LOGIN);
     } catch (e) {
       console.log(e);
@@ -34,31 +38,17 @@ const Register = () => {
     }
   };
 
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-  };
-
   return (
     <AuthWrapper title="Sign Up" banner={RegisterBanner}>
-      <Form layout="vertical" onFinish={() => handleRegister(user)} form={form}>
-        <Form.Item label="First Name">
-          <Input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            onChange={handleChangeInput}
-          />
+      <Form layout="vertical" onFinish={handleRegister} form={form}>
+        <Form.Item label="First Name" name="firstName">
+          <Input type="text" placeholder="First Name" />
         </Form.Item>
-        <Form.Item label="Last Name">
-          <Input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            onChange={handleChangeInput}
-          />
+        <Form.Item label="Last Name" name="lastName">
+          <Input type="text" placeholder="Last Name" />
         </Form.Item>
         <Form.Item
+          name="email"
           label="Email"
           rules={[
             {
@@ -67,12 +57,7 @@ const Register = () => {
             },
           ]}
         >
-          <Input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChangeInput}
-          />
+          <Input type="email" placeholder="Email" />
         </Form.Item>
         <Form.Item
           label="Password"
@@ -89,11 +74,7 @@ const Register = () => {
             },
           ]}
         >
-          <Input.Password
-            name="password"
-            placeholder="Password"
-            onChange={handleChangeInput}
-          />
+          <Input.Password placeholder="Password" />
         </Form.Item>
 
         <Form.Item
@@ -118,11 +99,7 @@ const Register = () => {
             }),
           ]}
         >
-          <Input.Password
-            name="password"
-            placeholder="Password"
-            onChange={handleChangeInput}
-          />
+          <Input.Password placeholder="Password" />
         </Form.Item>
         <Flex justify="end" align="center">
           <Link to={ROUTE_CONSTANTS.LOGIN}>Sign in</Link>
