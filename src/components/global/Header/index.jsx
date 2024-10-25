@@ -7,7 +7,7 @@ import "./style.css";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth, userProfileInfo } = useContext(AuthContext);
   return (
     <div className="main-header">
       <Flex justify="space-between" align="center">
@@ -15,7 +15,7 @@ const Header = () => {
 
         <div>
           {isAuth ? (
-            <AuthProfileDropDown />
+            <AuthProfileDropDown userProfileInfo={userProfileInfo} />
           ) : (
             <Link to={ROUTE_CONSTANTS.LOGIN}>
               <Button>Sign in</Button>

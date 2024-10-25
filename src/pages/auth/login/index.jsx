@@ -16,7 +16,6 @@ const Login = ({}) => {
     try {
       const { email, password } = values;
       const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response, ">>>>>>");
     } catch (error) {
       notification.error({
         message: "Invalid Login Credentials",

@@ -3,6 +3,7 @@ import { auth, db } from "../../../services/firebase";
 import { useState } from "react";
 import { Button, Flex, Form, Input } from "antd";
 import {
+  FIRESTORE_PATH_NAMES,
   regexpValidation,
   ROUTE_CONSTANTS,
 } from "../../../core/utils/constants";
@@ -28,8 +29,8 @@ const Register = () => {
       );
 
       const { uid } = response.user;
-      const createdDoc = doc(db, "registeredUsers", uid);
-      await setDoc(createdDoc, { uid, firstName, lastName, email });  
+      const createdDoc = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
+      await setDoc(createdDoc, { uid, firstName, lastName, email });
       navigate(ROUTE_CONSTANTS.LOGIN);
     } catch (e) {
       console.log(e);

@@ -3,30 +3,28 @@ import { signOut } from "firebase/auth";
 import "./style.css";
 import { auth, db } from "../../../services/firebase";
 import { useNavigate } from "react-router-dom";
-import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
-import { useEffect, useState } from "react";
-import { collection, getDocs } from "@firebase/firestore";
+import {
+  FIRESTORE_PATH_NAMES,
+  ROUTE_CONSTANTS,
+} from "../../../core/utils/constants";
 
 const { useToken } = theme;
 const { Text } = Typography;
 
-const AuthProfileDropDown = () => {
-  const [user, setUser] = useState([]);
+const getFullNameLetters = ({ firstName, lastName }) => {
+  if (firstName && lastName) {
+    return `${firstName[0]}  ${lastName[0]}`;
+  }
+};
+
+const AuthProfileDropDown = ({ userProfileInfo }) => {
   const { token } = useToken();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = getDocs(collection(db, "registeredUsers"));
-    };
-  });
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-    } catch (error) {
-      console.log(error, "signOut error");
-    }
+    } catch (error) {}
   };
 
   const items = [
@@ -67,8 +65,10 @@ const AuthProfileDropDown = () => {
                 size="large"
                 src="https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png"
               />
-              <Text>John Smith</Text>
-              <Text>johnsmith@gmail.com</Text>
+              <Text>
+                {userProfileInfo.firstName} {userProfileInfo.lastName}
+              </Text>
+              <Text>{userProfileInfo.email}</Text>
             </Flex>
             {menu}
           </div>
@@ -76,7 +76,7 @@ const AuthProfileDropDown = () => {
       }}
     >
       <Avatar size="large" className="user-profile-avatar">
-        J S
+        {getFullNameLetters(userProfileInfo)}
       </Avatar>
     </Dropdown>
   );
