@@ -9,28 +9,37 @@ import "./styles/global.css";
 import MainLayout from "./components/layouts/MainLayout";
 import { FIRESTORE_PATH_NAMES, ROUTE_CONSTANTS } from "./core/utils/constants";
 import { Login, Register } from "./pages/auth";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./services/firebase";
-import Cabinet from "./pages/cabinet";
 import Profile from "./pages/profile";
 import LoadingWrapper from "./components/shared/LoadinWrapper";
 import { AuthContext } from "./context/authContext";
 import { doc, getDoc } from "@firebase/firestore";
+import CabinetLayout from "./components/layouts/CabinetLayout";
 
 const App = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userProfileInfo, setUserProfileInfo] = useState({});
 
-  const handleUserData = async (uid) => {
+  const handleUserData = useCallback(async (uid) => {
     const docRef = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
     const response = await getDoc(docRef);
 
     if (response.exists()) {
       setUserProfileInfo(response.data());
     }
-  };
+  }, []);
+
+  // const handleUserData = async (uid) => {
+  //   const docRef = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
+  //   const response = await getDoc(docRef);
+
+  //   if (response.exists()) {
+  //     setUserProfileInfo(response.data());
+  //   }
+  // };
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -41,8 +50,12 @@ const App = () => {
     });
   }, []);
 
+  const getUserInfoData = useCallback(() => {
+    console.log("getUserData");
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isAuth, userProfileInfo }}>
+    <AuthContext.Provider value={{ isAuth, userProfileInfo, handleUserData }}>
       <LoadingWrapper loading={loading}>
         <RouterProvider
           router={createBrowserRouter(
@@ -68,26 +81,20 @@ const App = () => {
                     )
                   }
                 />
+
+                {/* CABINET LAYOUT */}
                 <Route
                   path={ROUTE_CONSTANTS.CABINET}
                   element={
                     isAuth ? (
-                      <Cabinet />
+                      <CabinetLayout />
                     ) : (
                       <Navigate to={ROUTE_CONSTANTS.LOGIN} />
                     )
                   }
-                />
-                <Route
-                  path={ROUTE_CONSTANTS.PROFILE}
-                  element={
-                    isAuth ? (
-                      <Profile />
-                    ) : (
-                      <Navigate to={ROUTE_CONSTANTS.LOGIN} />
-                    )
-                  }
-                />
+                >
+                  <Route path={ROUTE_CONSTANTS.PROFILE} element={<Profile />} />
+                </Route>
               </Route>
             )
           )}
