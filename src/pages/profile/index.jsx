@@ -1,16 +1,21 @@
 import "./style.css";
 import { Button, Form, Input, notification, Upload } from "antd";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/authContext";
+import { useEffect, useState } from "react";
 import { doc, updateDoc } from "@firebase/firestore";
 import { db } from "../../services/firebase";
 import { FIRESTORE_PATH_NAMES } from "../../core/utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfileInfo } from "../../state-managment/slices/userProfile";
 
 const Profile = () => {
-  const { userProfileInfo, handleUserData } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const {
+    authUserInfo: { userData },
+  } = useSelector((store) => store.userProfile);
+
   const [buttonLoading, setButtonLoading] = useState(false);
   const [form] = Form.useForm();
-  const { uid, ...resData } = userProfileInfo;
+  const { uid, ...resData } = userData;
 
   useEffect(() => {
     form.setFieldsValue(resData);
@@ -21,8 +26,8 @@ const Profile = () => {
 
     try {
       const userDocRef = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
-      const updatedData = await updateDoc(userDocRef, values);
-      handleUserData(uid);
+      await updateDoc(userDocRef, values);
+      dispatch(fetchUserProfileInfo);
       notification.success({
         message: "User updated successfully",
       });

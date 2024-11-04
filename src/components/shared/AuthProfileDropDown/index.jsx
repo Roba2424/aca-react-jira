@@ -1,12 +1,9 @@
 import { Avatar, Dropdown, Flex, theme, Typography } from "antd";
 import { signOut } from "firebase/auth";
 import "./style.css";
-import { auth, db } from "../../../services/firebase";
+import { auth } from "../../../services/firebase";
 import { useNavigate } from "react-router-dom";
-import {
-  FIRESTORE_PATH_NAMES,
-  ROUTE_CONSTANTS,
-} from "../../../core/utils/constants";
+import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
 
 const { useToken } = theme;
 const { Text } = Typography;

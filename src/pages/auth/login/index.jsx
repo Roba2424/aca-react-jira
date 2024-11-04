@@ -6,16 +6,24 @@ import { Link } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
 import AuthWrapper from "../../../components/shared/AuthWrapper";
 import LoginBanner from "../../../core/images/auth-login.jpg";
+import { useDispatch } from "react-redux";
+import {
+  fetchUserProfileInfo,
+  setIsAuth,
+} from "../../../state-managment/slices/userProfile";
 
-const Login = ({}) => {
+const Login = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const handleLogin = async (values) => {
     setLoading(true);
     try {
       const { email, password } = values;
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
+      form.resetFields();
+      dispatch(setIsAuth(true));
+      dispatch(fetchUserProfileInfo());
     } catch (error) {
       notification.error({
         message: "Invalid Login Credentials",
