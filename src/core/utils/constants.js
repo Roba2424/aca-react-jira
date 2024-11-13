@@ -10,3 +10,7 @@ export const ROUTE_CONSTANTS = {
 export const FIRESTORE_PATH_NAMES = {
   REGISTERED_USERS: "registered-users",
 };
+
+export const STORAGE_PATH_NAMES = {
+  PROFILE_IMAGES: "profile_images",
+};

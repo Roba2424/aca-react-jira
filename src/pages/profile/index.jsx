@@ -1,13 +1,23 @@
 import "./style.css";
-import { Button, Form, Input, notification, Upload } from "antd";
+import { Button, Form, Input, message, notification, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { doc, updateDoc } from "@firebase/firestore";
-import { db } from "../../services/firebase";
-import { FIRESTORE_PATH_NAMES } from "../../core/utils/constants";
+import { db, storage } from "../../services/firebase";
+import {
+  FIRESTORE_PATH_NAMES,
+  STORAGE_PATH_NAMES,
+} from "../../core/utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfileInfo } from "../../state-managment/slices/userProfile";
+import {
+  fetchUserProfileInfo,
+  setProfileImgUrl,
+} from "../../state-managment/slices/userProfile";
+import ImgUpload from "../../components/shared/imgUpload";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Profile = () => {
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
   const dispatch = useDispatch();
   const {
     authUserInfo: { userData },
@@ -41,6 +51,51 @@ const Profile = () => {
     }
   };
 
+  const updatedUserProfileImg = async (imgUrl) => {
+    try {
+      const userDocRef = doc(db, FIRESTORE_PATH_NAMES.REGISTERED_USERS, uid);
+      await updateDoc(userDocRef, { imgUrl });
+    } catch {
+      notification.error({
+        message: "Error :(",
+      });
+    }
+  };
+
+  const hanldeUpload = ({ file }) => {
+    setUploading(true);
+    const storageRef = ref(
+      storage,
+      `${STORAGE_PATH_NAMES.PROFILE_IMAGES}/${file.name}`
+    );
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progressValue = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progressValue);
+        console.log(snapshot);
+      },
+      (error) => {
+        setUploading(false);
+        setProgress(0);
+        message.error(`Error uploading file ${error.message}`);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((imgUrl) => {
+          setUploading(false);
+          setProgress(0);
+          updatedUserProfileImg(imgUrl);
+          dispatch(setProfileImgUrl(imgUrl));
+          message.success(`File uploaded`);
+        });
+      }
+    );
+  };
+
   return (
     <div>
       <Form
@@ -50,7 +105,11 @@ const Profile = () => {
         onFinish={handleEditUserProfileInfo}
       >
         <Form.Item label="Profile Image">
-          <Upload>UPLOAD FILE</Upload>
+          <ImgUpload
+            handleUpload={hanldeUpload}
+            progress={progress}
+            uploading={uploading}
+          />
         </Form.Item>
         <Form.Item
           label="First Name"

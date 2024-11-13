@@ -1,5 +1,5 @@
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
 import "./style.css";
 
@@ -9,12 +9,23 @@ const menuItems = [
     label: "Personal Information",
     key: ROUTE_CONSTANTS.PROFILE,
   },
+  {
+    label: "Cabinet",
+    key: ROUTE_CONSTANTS.CABINET,
+  },
 ];
 
 const CabinetLayout = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleNavigate = ({ key }) => {
+    navigate(key);
+  };
 
   return (
     <div className="cabinet_layout_main_container">
@@ -23,7 +34,12 @@ const CabinetLayout = () => {
         width={200}
         style={{ backgroundColor: colorBgContainer }}
       >
-        <Menu mode="inline" items={menuItems} />
+        <Menu
+          mode="inline"
+          items={menuItems}
+          onSelect={handleNavigate}
+          selectedKeys={pathname}
+        />
       </Sider>
 
       <Layout style={{ padding: `0 24px 24px` }}>

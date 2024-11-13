@@ -4,6 +4,8 @@ import "./style.css";
 import { auth } from "../../../services/firebase";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANTS } from "../../../core/utils/constants";
+import { useDispatch } from "react-redux";
+import { setIsAuth } from "../../../state-managment/slices/userProfile";
 
 const { useToken } = theme;
 const { Text } = Typography;
@@ -16,11 +18,13 @@ const getFullNameLetters = ({ firstName, lastName }) => {
 
 const AuthProfileDropDown = ({ userProfileInfo }) => {
   const { token } = useToken();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
+      dispatch(setIsAuth(false));
     } catch (error) {}
   };
 
@@ -56,11 +60,12 @@ const AuthProfileDropDown = ({ userProfileInfo }) => {
               boxShadow: token.boxShadowSecondary,
             }}
           >
+            {/* "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png" */}
             <Flex vertical align="center" style={{ padding: token.sizeXS }}>
               <Avatar
                 className="user-profile-avatar"
                 size="large"
-                src="https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png"
+                src={userProfileInfo.imgUrl}
               />
               <Text>
                 {userProfileInfo.firstName} {userProfileInfo.lastName}
