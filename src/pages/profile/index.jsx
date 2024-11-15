@@ -1,5 +1,5 @@
 import "./style.css";
-import { Button, Form, Input, message, notification, Upload } from "antd";
+import { Button, Form, Input, message, notification } from "antd";
 import { useEffect, useState } from "react";
 import { doc, updateDoc } from "@firebase/firestore";
 import { db, storage } from "../../services/firebase";

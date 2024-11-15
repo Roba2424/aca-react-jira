@@ -1,4 +1,4 @@
-import { Upload, Progress, Image, Tooltip } from "antd";
+import { Upload, Progress } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";

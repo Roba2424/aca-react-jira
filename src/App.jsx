@@ -15,6 +15,7 @@ import LoadingWrapper from "./components/shared/LoadinWrapper";
 import CabinetLayout from "./components/layouts/CabinetLayout";
 import { fetchUserProfileInfo } from "./state-managment/slices/userProfile";
 import { useDispatch, useSelector } from "react-redux";
+import Cabinet from "./pages/cabinet";
 
 const App = () => {
   const distpatch = useDispatch();
@@ -49,7 +50,7 @@ const App = () => {
                   )
                 }
               />
-              
+
               {/* CABINET LAYOUT */}
               <Route
                 path={ROUTE_CONSTANTS.CABINET}
@@ -62,6 +63,7 @@ const App = () => {
                 }
               >
                 <Route path={ROUTE_CONSTANTS.PROFILE} element={<Profile />} />
+                <Route path={ROUTE_CONSTANTS.CABINET} element={<Cabinet />} />
               </Route>
             </Route>
           )
