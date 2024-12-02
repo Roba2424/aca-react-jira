@@ -74,7 +74,6 @@ const ModalForm = ({ form, onFinish }) => {
         <Select placeholder="Priority">
           {Object.values(ISSUE_PRIORITY_OPTIONS).map(
             ({ value, label, icon }) => {
-              console.log(value, "PRIORITY<<<<<<<");
               return (
                 <Select.Option key={value} value={value}>
                   <Space>
