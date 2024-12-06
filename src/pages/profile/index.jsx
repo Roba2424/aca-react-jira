@@ -77,7 +77,6 @@ const Profile = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
         setProgress(progressValue);
-        console.log(snapshot);
       },
       (error) => {
         setUploading(false);

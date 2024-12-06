@@ -3,13 +3,14 @@ import {
   ISSUE_OPTIONS,
   ISSUE_PRIORITY_OPTIONS,
 } from "../../../../core/utils/issues";
-import Editor from "../Edit";
+import Editor from "../../Editor";
 
 const ModalForm = ({ form, onFinish }) => {
   return (
     <Form layout="vertical" form={form} onFinish={onFinish}>
       {/* ISSUE TITLE */}
       <Form.Item
+        name="issueName"
         label="Issue Name"
         rules={[
           {
@@ -57,7 +58,8 @@ const ModalForm = ({ form, onFinish }) => {
           },
         ]}
       >
-        <Editor type="text" placeholder="description" />
+        {/* Editor */}
+        <Editor type="text" placeholder="description" />  
       </Form.Item>
 
       {/* ISSUE PRIORITY */}

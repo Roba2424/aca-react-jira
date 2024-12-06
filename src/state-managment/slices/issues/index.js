@@ -4,7 +4,8 @@ import { FIRESTORE_PATH_NAMES } from "../../../core/utils/constants";
 import { collection, getDocs } from "@firebase/firestore";
 
 const initialState = {
-  issueColumns: [],
+  data: [],
+  error: null,
   isLoading: false,
 };
 
@@ -31,7 +32,12 @@ const issueSlice = createSlice({
       })
       .addCase(fetchIssueData.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.issueColumns = action.payload;
+        state.data = action.payload;
+      })
+      .addCase(fetchIssueData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.data = [];
+        state.error = action.payload;
       });
   },
 });
