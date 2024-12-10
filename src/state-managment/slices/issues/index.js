@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { db } from "../../../services/firebase";
 import { FIRESTORE_PATH_NAMES } from "../../../core/utils/constants";
 import { collection, getDocs } from "@firebase/firestore";
+import { transformIssueData } from "../../../core/helpers/transformIssueData";
 
 const initialState = {
   data: [],
@@ -15,9 +16,13 @@ export const fetchIssueData = createAsyncThunk(
     const queryData = await getDocs(
       collection(db, FIRESTORE_PATH_NAMES.ISSUES)
     );
-    return queryData.docs.map((doc) => {
+    const resultData = queryData.docs.map((doc) => {
       return doc.data();
     });
+
+    transformIssueData(resultData)
+
+    return resultData
   }
 );
 

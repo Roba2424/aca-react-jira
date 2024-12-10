@@ -7,6 +7,7 @@ import { db } from "../../../../services/firebase/index";
 import { FIRESTORE_PATH_NAMES } from "../../../../core/utils/constants";
 import { fetchIssueData } from "../../../../state-managment/slices/issues";
 import { useDispatch } from "react-redux";
+import { taskStatuses } from "../../../../core/utils/issues";
 
 const AddIssueModal = ({ isOpen, onClose }) => {
   const [form] = Form.useForm();
@@ -18,6 +19,7 @@ const AddIssueModal = ({ isOpen, onClose }) => {
     const taskModel = {
       taskId,
       ...values,
+      status: taskStatuses.TODO.key,
       date: new Date().toLocaleDateString(),
     };
 
@@ -30,7 +32,7 @@ const AddIssueModal = ({ isOpen, onClose }) => {
       notification.success({
         message: "Your task been created",
       });
-      dispatch(fetchIssueData())
+      dispatch(fetchIssueData());
     } catch (error) {
       notification.error({
         message: "Erro task",
