@@ -20,9 +20,7 @@ export const fetchIssueData = createAsyncThunk(
       return doc.data();
     });
 
-    transformIssueData(resultData)
-
-    return resultData
+    return transformIssueData(resultData);
   }
 );
 
