@@ -27,7 +27,33 @@ export const fetchIssueData = createAsyncThunk(
 const issueSlice = createSlice({
   name: "issue",
   initialState,
-  reducers: {},
+  reducers: {
+    changeIssueColumns: (state, action) => {
+      const columns = state.data;
+      const { destination, source } = action.payload;
+      const sourceColumnItems = [...columns[source.droppableId]];
+      const destinationColumnItems = [...columns[destination.droppableId]];
+      const [removedItem] = sourceColumnItems.splice(source.index, 1);
+      destinationColumnItems.splice(destination.index, 0, removedItem);
+
+      let changedColumns = {};
+      if (source.droppableId !== destination.droppableId) {
+        changedColumns = {
+          ...columns,
+          [source.droppableId]: sourceColumnItems,
+          [destination.droppableId]: destinationColumnItems,
+        };
+        console.log(changedColumns, "changedColumns");
+      } else {
+        sourceColumnItems.splice(destination.index, 0, removedItem);
+        changedColumns = {
+          ...columns,
+          [source.droppableId]: sourceColumnItems,
+        };
+      }
+      state.data = changedColumns;
+    },
+  },
   extraReducers: (promise) => {
     promise
       .addCase(fetchIssueData.pending, (state) => {
@@ -45,5 +71,5 @@ const issueSlice = createSlice({
   },
 });
 
-export const {} = issueSlice.actions;
+export const { changeIssueColumns } = issueSlice.actions;
 export default issueSlice.reducer;

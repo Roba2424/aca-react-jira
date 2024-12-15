@@ -1,14 +1,21 @@
-import { Button, Typography } from "antd";
+import { Button, Flex, Typography } from "antd";
 import AddIssueModal from "../../components/shared/IssueModal/Add";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchIssueData } from "../../state-managment/slices/issues";
+import {
+  changeIssueColumns,
+  fetchIssueData,
+} from "../../state-managment/slices/issues";
 import EditIssueModal from "../../components/shared/IssueModal/Edit";
 import LoadingWrapper from "../../components/shared/LoadinWrapper";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { ISSUE_OPTIONS, taskStatuses } from "../../core/utils/issues";
+import { FIRESTORE_PATH_NAMES } from "../../core/utils/constants";
 import "./style.css";
+import { doc, updateDoc } from "@firebase/firestore";
+import { db } from "../../services/firebase";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const Cabinet = () => {
   const dispatch = useDispatch();
@@ -27,7 +34,21 @@ const Cabinet = () => {
   const handleClose = () => {
     setShowModal(false);
   };
-  console.log(data);
+
+  const hanldeChangeTaskStatus = async (result) => {
+    if (result.destination) {
+      const { destination, source } = result;
+
+      try {
+        dispatch(changeIssueColumns({ source, destination }));
+        const docRef = doc(db, FIRESTORE_PATH_NAMES.ISSUES, result.draggableId);
+        await updateDoc(docRef, { status: destination.droppableId });
+      } catch (error) {
+        console.log("Error Drag");
+      }
+    }
+  };
+
   return (
     <div>
       <Button type="primary" onClick={handleOpenModal}>
@@ -46,25 +67,28 @@ const Cabinet = () => {
 
       <div className="drag-context-container">
         <LoadingWrapper isLoading={isLoading}>
-          <DragDropContext>
+          <DragDropContext onDragEnd={hanldeChangeTaskStatus}>
             {Object.entries(data).map(([columnId, column]) => {
+              console.log(data)
               return (
                 <div className="column-container" key={columnId}>
                   <div className="column-header">
                     <Title level={5} type="secondary">
-                      {columnId} - {column.length} items
+                      {taskStatuses[columnId].title}{' '}{data[columnId].length}
                     </Title>
                   </div>
 
                   <div>
                     <Droppable droppableId={columnId} key={columnId}>
                       {(provided, snapshot) => {
-                        console.log(provided);
                         return (
                           <div
                             className="droppable-container"
                             ref={provided.innerRef}
+                            {...provided.droppableProps}
                           >
+                            {provided.placeholder}
+
                             {column.map((item, index) => {
                               return (
                                 <Draggable
@@ -79,8 +103,15 @@ const Cabinet = () => {
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
+                                        onClick={() => setEditModalData(item)}
                                       >
-                                        Task
+                                        <Flex justify="space-between">
+                                          <Text>{item.issueName}</Text>
+
+                                          <div>
+                                            {ISSUE_OPTIONS[item.type]?.icon}
+                                          </div>
+                                        </Flex>
                                       </div>
                                     );
                                   }}
